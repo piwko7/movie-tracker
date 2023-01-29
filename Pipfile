@@ -9,6 +9,7 @@ uvicorn = "*"
 tomli = "*"
 ruff = "*"
 api = {path = "."}
+pytest = "*"
 
 [dev-packages]
 pytest = "*"
