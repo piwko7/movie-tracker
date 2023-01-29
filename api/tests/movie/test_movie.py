@@ -46,6 +46,7 @@ def test_get(movies_seed, movie_id, expected_result):
     repo = MemoryMovieRepository()
     for movie in movies_seed:
         repo.create(movie)
+    # noinspection PyTypeChecker
     movie = repo.get(movie_id=movie_id)
 
     assert movie == expected_result
@@ -94,6 +95,7 @@ def test_get_by_title(movies_seed, movie_title, expected_result):
     repo = MemoryMovieRepository()
     for movie in movies_seed:
         repo.create(movie)
+    # noinspection PyTypeChecker
     result = repo.get_by_title(title=movie_title)
     assert result == expected_result
 
