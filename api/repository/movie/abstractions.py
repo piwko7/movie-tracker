@@ -8,17 +8,17 @@ class RepositoryException(Exception):
 
 
 class MovieRepository(abc.ABC):
-    def create(self, movie: Movie):
+    async def create(self, movie: Movie):
         raise NotImplementedError
 
-    def get(self, movie_id: str) -> Movie | None:
+    async def get(self, movie_id: str) -> Movie | None:
         raise NotImplementedError
 
-    def get_by_title(self, title: str) -> list[Movie]:
+    async def get_by_title(self, title: str) -> list[Movie]:
         raise NotImplementedError
 
-    def delete(self, movie_id: str):
+    async def delete(self, movie_id: str):
         raise NotImplementedError
 
-    def update(self, movie_id: str, update_parameters: dict):
+    async def update(self, movie_id: str, update_parameters: dict):
         raise NotImplementedError

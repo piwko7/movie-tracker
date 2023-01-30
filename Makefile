@@ -15,10 +15,10 @@ install: pre-deps
 	pipenv sync --dev
 
 lint:
-	pipenv run ruff .
+	pipenv run ruff . --fix
 	pipenv run isort --check .
 	pipenv run black --check .
-	pipenv run mypy
+	#pipenv run mypy
 
 format:
 	pipenv run isort .

@@ -9,15 +9,19 @@ bandit = {extras = ["toml"], version = "*"}
 fastapi = "*"
 flake8 = "*"
 isort = "*"
+motor = "*"
 mypy = "*"
 pre-commit = "*"
 pytest = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
+pytest-random-order = "*"
+pytest-socket = "*"
 ruff = "*"
 tomli = "*"
 uvicorn = "*"
 
 [dev-packages]
-
 
 [requires]
 python_version = "3.11"
