@@ -38,7 +38,7 @@ class MemoryMovieRepository(MovieRepository):
                 raise RepositoryException("can't update movie id")
             if hasattr(movie, key):
                 # update the Movie entity field
-                setattr(movie, f"_{key}", value)
+                setattr(movie, key, value)
 
 
 class MongoMovieRepository(MovieRepository):
@@ -54,16 +54,30 @@ class MongoMovieRepository(MovieRepository):
         self._movies = self._database["movies"]
 
     async def create(self, movie: Movie):
-        pass
+        await self._movies.insert_one(movie.dict())
 
     async def get(self, movie_id: str) -> Movie | None:
-        pass
+        document = await self._movies.find_one({"id": movie_id})
+        if document:
+            return Movie(**document)
+        return None
 
     async def get_by_title(self, title: str) -> list[Movie]:
-        pass
+        return_value = []
+        documents_cursor = self._movies.find({"title": title})
+        for document in documents_cursor:
+            return_value.append(Movie(**document))
+
+        return return_value
 
     async def delete(self, movie_id: str):
-        pass
+        await self._movies.delete_one({"id": movie_id})
 
     async def update(self, movie_id: str, update_parameters: dict):
-        pass
+        if "id" in update_parameters.keys():
+            raise RepositoryException("can't update movie id.")
+        result = await self._movies.update_one(
+            {"id": movie_id}, {"$set": update_parameters}
+        )
+        if result.modified_count == 0:
+            raise RepositoryException(f"movie: {movie_id} not found")

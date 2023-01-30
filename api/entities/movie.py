@@ -1,40 +1,33 @@
-class Movie:
-    def __init__(
-        self,
-        *,
-        movie_id: str,
-        title: str,
-        description: str,
-        release_year: int,
-        watched: bool = False,
-    ):
-        if movie_id is None:
-            raise ValueError("Move id is required!")
-        self._id = movie_id
-        self._title = title
-        self._description = description
-        self._release_year = release_year
-        self._watched = watched
+from pydantic import BaseModel
+
+
+class Movie(BaseModel):
+    movie_id: str
+    title: str
+    description: str
+    release_year: int
+    watched: bool = False
+
+    # def __init__(
+    #     self,
+    #     *,
+    #     movie_id: str,
+    #     title: str,
+    #     description: str,
+    #     release_year: int,
+    #     watched: bool = False,
+    # ):
+    #     if movie_id is None:
+    #         raise ValueError("Move id is required!")
+    #     self._id = movie_id
+    #     self._title = title
+    #     self._description = description
+    #     self._release_year = release_year
+    #     self._watched = watched
 
     @property
     def id(self) -> str:
-        return self._id
-
-    @property
-    def title(self) -> str:
-        return self._title
-
-    @property
-    def description(self) -> str:
-        return self._description
-
-    @property
-    def release_year(self) -> int:
-        return self._release_year
-
-    @property
-    def watched(self) -> bool:
-        return self._watched
+        return self.movie_id
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Movie):
