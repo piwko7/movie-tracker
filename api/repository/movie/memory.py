@@ -28,7 +28,7 @@ class MemoryMovieRepository(MovieRepository):
             raise RepositoryException(f"movie: {movie_id} not found")
         for key, value in update_parameters.items():
             if key == "id":
-                raise RepositoryException(f"can't update movie id")
+                raise RepositoryException("can't update movie id")
             if hasattr(movie, key):
                 # update the Movie entity field
                 setattr(movie, f"_{key}", value)

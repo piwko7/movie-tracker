@@ -29,7 +29,7 @@ def test_create():
                     title="My movie",
                     description="My description",
                     release_year=1991,
-                )
+                ),
             ],
             "my-id",
             Movie(
@@ -63,7 +63,7 @@ def test_get(movies_seed, movie_id, expected_result):
                     title="My movie",
                     description="My description",
                     release_year=1991,
-                )
+                ),
             ],
             "some-title",
             [],
@@ -76,7 +76,7 @@ def test_get(movies_seed, movie_id, expected_result):
                     title="My movie",
                     description="My description",
                     release_year=1991,
-                )
+                ),
             ],
             "My movie",
             [
@@ -85,7 +85,7 @@ def test_get(movies_seed, movie_id, expected_result):
                     title="My movie",
                     description="My description",
                     release_year=1991,
-                )
+                ),
             ],
             id="results",
         ),
@@ -108,7 +108,7 @@ def test_update():
             title="My movie",
             description="My description",
             release_year=1991,
-        )
+        ),
     )
     repo.update(
         movie_id="my-id-2",
@@ -137,7 +137,7 @@ def test_update_fail():
             title="My movie",
             description="My description",
             release_year=1991,
-        )
+        ),
     )
     with pytest.raises(RepositoryException):
         repo.update(movie_id="my-id-2", update_parameters={"id": "fail"})
@@ -151,7 +151,7 @@ def test_delete():
             title="My movie",
             description="My description",
             release_year=1991,
-        )
+        ),
     )
     repo.delete("my-id-2")
     assert repo.get("my-id-2") is None

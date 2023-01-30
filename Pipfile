@@ -4,18 +4,20 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = "*"
-uvicorn = "*"
-tomli = "*"
-ruff = "*"
 api = {path = "."}
+bandit = {extras = ["toml"], version = "*"}
+fastapi = "*"
+flake8 = "*"
+isort = "*"
+mypy = "*"
+pre-commit = "*"
 pytest = "*"
+ruff = "*"
+tomli = "*"
+uvicorn = "*"
 
 [dev-packages]
-pytest = "*"
-black = "*"
-isort = "*"
-fastapi = "*"
+
 
 [requires]
 python_version = "3.11"

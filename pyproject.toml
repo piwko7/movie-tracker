@@ -1,18 +1,22 @@
 [tool.ruff]
 # https://github.com/charliermarsh/ruff/#supported-rules
 select = [
-    "E",    # pycodestyle
-    "W",    # pycodestyle
-    "F",    # Pyflakes
-    "T10",  # flake8-debugger
-    "T20",  # flake8-print
-    "Q",    # flake8-quotes
     "C4",   # flake8-comprehensions
     "C90",  # mccabe
-    "UP",   # pyupgrade
-    "N",    # pep8-naming
+    "COM",  # flake8-commas
+    "E",    # pycodestyle
     "ERA",  # eradicate
+    "F",    # Pyflakes
+    "N",    # pep8-naming
+    "Q",    # flake8-quotes
+    "RET",  # flake8-return
     "RUF",  # ruff-specific rules
+    "SIM",  # flake8-simplify
+    "T10",  # flake8-debugger
+    "T20",  # flake8-print
+    "TID",  # flake8-tidy-imports
+    "UP",   # pyupgrade
+    "W",    # pycodestyle
 ]
 target-version = "py311"
 
@@ -21,4 +25,21 @@ classmethod-decorators = [
     "classmethod",
     "pydantic.validator",
     "pydantic.root_validator"
+
 ]
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = """
+    --random-order
+    --disable-socket
+    --allow-unix-socket
+"""
+
+[tool.bandit]
+exclude_dirs = ["tests"]
