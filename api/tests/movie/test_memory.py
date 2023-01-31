@@ -133,31 +133,31 @@ async def test_update():
     )
 
 
-# @pytest.mark.asyncio
-# def test_update_fail():
-#     repo = MemoryMovieRepository()
-#     await repo.create(
-#         Movie(
-#             movie_id="my-id-2",
-#             title="My movie",
-#             description="My description",
-#             release_year=1991,
-#         ),
-#     )
-#     with pytest.raises(RepositoryException):
-#         await repo.update(movie_id="my-id-2", update_parameters={"id": "fail"})
-#
-#
-# @pytest.mark.asyncio
-# def test_delete():
-#     repo = MemoryMovieRepository()
-#     await repo.create(
-#         Movie(
-#             movie_id="my-id-2",
-#             title="My movie",
-#             description="My description",
-#             release_year=1991,
-#         ),
-#     )
-#     await repo.delete("my-id-2")
-#     assert await repo.get("my-id-2") is None
+@pytest.mark.asyncio
+def test_update_fail():
+    repo = MemoryMovieRepository()
+    await repo.create(
+        Movie(
+            movie_id="my-id-2",
+            title="My movie",
+            description="My description",
+            release_year=1991,
+        ),
+    )
+    with pytest.raises(RepositoryException):
+        await repo.update(movie_id="my-id-2", update_parameters={"id": "fail"})
+
+
+@pytest.mark.asyncio
+def test_delete():
+    repo = MemoryMovieRepository()
+    await repo.create(
+        Movie(
+            movie_id="my-id-2",
+            title="My movie",
+            description="My description",
+            release_year=1991,
+        ),
+    )
+    await repo.delete("my-id-2")
+    assert await repo.get("my-id-2") is None
