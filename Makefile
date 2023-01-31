@@ -1,11 +1,11 @@
 run:
-	sudo docker-compose up -d
+	docker-compose up -d
 
 stop:
-	sudo docker-compose down
+	docker-compose down
 
 build: purge
-	sudo docker-compose build
+	docker-compose build
 
 
 pre-deps:
@@ -15,7 +15,7 @@ install: pre-deps
 	pipenv sync --dev
 
 lint:
-	pipenv run ruff . --fix
+	pipenv run ruff .
 	pipenv run isort --check .
 	pipenv run black --check .
 	#pipenv run mypy

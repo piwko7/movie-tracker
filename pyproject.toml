@@ -35,7 +35,6 @@ profile = "black"
 [tool.pytest.ini_options]
 addopts = """
     --random-order
-    --disable-socket
     --allow-unix-socket
 """
 
