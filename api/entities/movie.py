@@ -1,29 +1,30 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class Movie(BaseModel):
     movie_id: str
+    release_year: int
     title: str
     description: str
-    release_year: int
     watched: bool = False
 
-    # def __init__(
-    #     self,
-    #     *,
-    #     movie_id: str,
-    #     title: str,
-    #     description: str,
-    #     release_year: int,
-    #     watched: bool = False,
-    # ):
-    #     if movie_id is None:
-    #         raise ValueError("Move id is required!")
-    #     self._id = movie_id
-    #     self._title = title
-    #     self._description = description
-    #     self._release_year = release_year
-    #     self._watched = watched
+    @validator("title")
+    def title_length_gt_three(cls, v):
+        if len(v) < 4:
+            raise ValueError("Title length must be greater than 3 characters")
+        return v
+
+    @validator("description")
+    def description_length_gt_three(cls, v):
+        if len(v) < 4:
+            raise ValueError("Description length must be greater than 3 characters")
+        return v
+
+    @validator("release_year")
+    def release_year_gt_1900(cls, v):
+        if v < 1900:
+            raise ValueError("Release year must be greater than 1900")
+        return v
 
     @property
     def id(self) -> str:
