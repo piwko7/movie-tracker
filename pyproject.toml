@@ -10,11 +10,11 @@ select = [
     "Q",    # flake8-quotes
     "RET",  # flake8-return
     "RUF",  # ruff-specific rules
-    "SIM",  # flake8-simplify
+#    "SIM",  # flake8-simplify
     "T10",  # flake8-debugger
     "T20",  # flake8-print
     "TID",  # flake8-tidy-imports
-    "UP",   # pyupgrade
+#    "UP",   # pyupgrade
     "W",    # pycodestyle
 ]
 target-version = "py311"

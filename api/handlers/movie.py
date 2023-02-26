@@ -1,16 +1,27 @@
 import uuid
+from functools import lru_cache
 
 from fastapi import APIRouter, Depends
 from starlette import status
 
 from api.entities.movie import Movie
 from api.repository.movie.mongo import MongoMovieRepository
+from api.settings import Settings
 
 router = APIRouter(prefix="/api/v1/movie", tags=["movies"])
 
 
-def movie_repository():
-    return MongoMovieRepository()
+@lru_cache()
+def settings_instance():
+    return Settings()
+
+
+@lru_cache()
+def movie_repository(settings: Settings = Depends(settings_instance)):
+    return MongoMovieRepository(
+        connection_string=settings.mongo_connection_string,
+        database=settings.mongo_database_name,
+    )
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)

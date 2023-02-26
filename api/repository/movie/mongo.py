@@ -12,8 +12,8 @@ class MongoMovieRepository(MovieRepository):
 
     def __init__(
         self,
-        connection_string: str = "mongodb://localhost:27017",
-        database: str = "movie_tracker_db",
+        connection_string: str,
+        database: str,
     ):
         self._client = motor.motor_asyncio.AsyncIOMotorClient(connection_string)
         self._database = self._client[database]
@@ -44,7 +44,8 @@ class MongoMovieRepository(MovieRepository):
         if "id" in update_parameters.keys():
             raise RepositoryException("can't update movie id.")
         result = await self._movies.update_one(
-            {"movie_id": movie_id}, {"$set": update_parameters}
+            {"movie_id": movie_id},
+            {"$set": update_parameters},
         )
         if result.modified_count == 0:
             raise RepositoryException(f"movie: {movie_id} not found")
