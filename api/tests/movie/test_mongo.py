@@ -2,10 +2,9 @@ import pytest
 
 from api.entities.movie import Movie
 from api.repository.movie.abstractions import RepositoryException
-from api.repository.movie.mongo import MongoMovieRepository
 
 # noinspection PyUnresolvedReferences
-from api.tests.movie.fixture import mongo_movie_repo_fixture
+from api.tests.fixture import mongo_movie_repo_fixture
 
 
 @pytest.mark.asyncio
@@ -111,7 +110,10 @@ async def test_get(mongo_movie_repo_fixture, initial_movies, movie_id, expected_
 )
 @pytest.mark.asyncio
 async def test_get_by_title(
-    mongo_movie_repo_fixture, initial_movies, searched_title, expected_result
+    mongo_movie_repo_fixture,
+    initial_movies,
+    searched_title,
+    expected_result,
 ):
     for movie in initial_movies:
         await mongo_movie_repo_fixture.create(movie)
@@ -129,7 +131,8 @@ async def test_update(mongo_movie_repo_fixture):
     )
     await mongo_movie_repo_fixture.create(initial_movie)
     await mongo_movie_repo_fixture.update(
-        movie_id="first", update_parameters={"title": "Update title"}
+        movie_id="first",
+        update_parameters={"title": "Update title"},
     )
     updated_movie = await mongo_movie_repo_fixture.get(movie_id="first")
     assert updated_movie == Movie(
@@ -151,7 +154,8 @@ async def test_update_fail(mongo_movie_repo_fixture):
     await mongo_movie_repo_fixture.create(initial_movie)
     with pytest.raises(RepositoryException):
         await mongo_movie_repo_fixture.update(
-            movie_id="first", update_parameters={"id": "Not allowed"}
+            movie_id="first",
+            update_parameters={"id": "Not allowed"},
         )
 
 
