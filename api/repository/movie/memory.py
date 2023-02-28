@@ -17,12 +17,19 @@ class MemoryMovieRepository(MovieRepository):
     async def get(self, movie_id: str) -> Movie | None:
         return self._storage.get(movie_id)
 
-    async def get_by_title(self, title: str) -> list[Movie]:
+    async def get_by_title(
+        self,
+        title: str,
+        offset: int = 0,
+        limit: int = 1000,
+    ) -> list[Movie]:
         return_value = []
-        for _, value in self._storage.items():
+        for _, value in self._storage.items()[offset : offset + limit]:
             if title == value.title:
                 return_value.append(value)
-        return return_value
+        if limit == 0:
+            return return_value[offset:]
+        return return_value[offset : offset + limit]
 
     async def delete(self, movie_id: str):
         self._storage.pop(movie_id, None)

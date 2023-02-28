@@ -1,4 +1,5 @@
 import uuid
+from collections import namedtuple
 from functools import lru_cache
 
 from fastapi import APIRouter, Depends, Query
@@ -27,6 +28,11 @@ def movie_repository(settings: Settings = Depends(settings_instance)):
     )
 
 
+def pagination_params(offset: int = Query(0, qe=0), limit: int = Query(1000, le=1000)):
+    Pagination = namedtuple("Pagination", ["offset", "limit"])
+    return Pagination(offset=offset, limit=limit)
+
+
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_movie(
     movie: Movie,
@@ -44,11 +50,16 @@ async def create_movie(
 )
 async def get_movie_by_title(
     title: str = Query(..., description="The title of the movie.", min_length=3),
+    pagination=Depends(pagination_params),
     repo: MongoMovieRepository = Depends(
         movie_repository,
     ),
 ):
-    movie = await repo.get_by_title(title=title)
+    movie = await repo.get_by_title(
+        title=title,
+        offset=pagination.offset,
+        limit=pagination.limit,
+    )
     if movie is None:
         return DetailResponse(message=f"Movie with title {title} is not exist")
     return movie

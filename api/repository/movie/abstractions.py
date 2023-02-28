@@ -14,7 +14,12 @@ class MovieRepository(abc.ABC):
     async def get(self, movie_id: str) -> Movie | None:
         raise NotImplementedError
 
-    async def get_by_title(self, title: str) -> list[Movie]:
+    async def get_by_title(
+        self,
+        title: str,
+        offset: int = 0,
+        limit: int = 1000,
+    ) -> list[Movie]:
         raise NotImplementedError
 
     async def delete(self, movie_id: str):
