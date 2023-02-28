@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, validator
 
 
@@ -40,3 +42,10 @@ class Movie(BaseModel):
             and self.release_year == o.release_year
             and self.watched == o.watched
         )
+
+
+class UpdateMovie(BaseModel):
+    release_year: Optional[int]
+    title: Optional[str]
+    description: Optional[str]
+    watched: Optional[bool]

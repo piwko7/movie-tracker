@@ -38,7 +38,7 @@ class MongoMovieRepository(MovieRepository):
         return return_value
 
     async def delete(self, movie_id: str):
-        await self._movies.delete_one({"movie_id": movie_id})
+        return await self._movies.delete_one({"movie_id": movie_id})
 
     async def update(self, movie_id: str, update_parameters: dict):
         if "id" in update_parameters.keys():
@@ -48,4 +48,4 @@ class MongoMovieRepository(MovieRepository):
             {"$set": update_parameters},
         )
         if result.modified_count == 0:
-            raise RepositoryException(f"movie: {movie_id} not found")
+            raise RepositoryException(f"movie: {movie_id} not updated")

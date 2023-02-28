@@ -1,13 +1,15 @@
 import uuid
 from functools import lru_cache
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from starlette import status
+from starlette.responses import Response
 
-from api.entities.movie import Movie
+from api.entities.movie import Movie, UpdateMovie
+from api.repository.movie.abstractions import RepositoryException
 from api.repository.movie.mongo import MongoMovieRepository
+from api.responses.detail import DetailResponse
 from api.settings import Settings
-from build.lib.api.responses.detail import DetailResponse
 
 router = APIRouter(prefix="/api/v1/movie", tags=["movies"])
 
@@ -38,30 +40,66 @@ async def create_movie(
 
 
 @router.get(
-    "/{movie_id}",
+    "/title",
 )
-async def get_movie_by_id(
-    movie_id=str,
+async def get_movie_by_title(
+    title: str = Query(..., description="The title of the movie.", min_length=3),
     repo: MongoMovieRepository = Depends(
         movie_repository,
     ),
-) -> Movie:
+):
+    movie = await repo.get_by_title(title=title)
+    if movie is None:
+        return DetailResponse(message=f"Movie with title {title} is not exist")
+    return movie
+
+
+@router.get(
+    "/{movie_id}",
+)
+async def get_movie_by_id(
+    movie_id: str,
+    repo: MongoMovieRepository = Depends(
+        movie_repository,
+    ),
+):
     movie = await repo.get(movie_id=movie_id)
     if movie is None:
         return DetailResponse(message=f"Movie with id {movie_id} is not exist")
     return movie
 
 
-@router.get(
-    "/{title}",
-)
-async def get_movie_by_title(
-    title=str,
+@router.patch("/{movie_id}")
+async def update_movie(
+    movie_id: str,
+    update_parameters: UpdateMovie,
     repo: MongoMovieRepository = Depends(
         movie_repository,
     ),
-) -> list[Movie]:
-    movie = await repo.get_by_title(title=title)
-    if movie is None:
-        return DetailResponse(message=f"Movie with title {title} is not exist")
-    return movie
+):
+    try:
+        await repo.update(
+            movie_id=movie_id,
+            update_parameters=update_parameters.dict(exclude_unset=True),
+        )
+        return DetailResponse(message="Movie successfully updated")
+    except RepositoryException as exc:
+        return Response(status_code=status.HTTP_400_BAD_REQUEST, content=exc.args[0])
+
+
+@router.delete(
+    "/{movie_id}",
+)
+async def delete_movie_by_id(
+    movie_id: str,
+    repo: MongoMovieRepository = Depends(
+        movie_repository,
+    ),
+):
+    deleted_movie = await repo.delete(movie_id=movie_id)
+    if deleted_movie.deleted_count == 0:
+        return Response(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content="Specified movies does not exist",
+        )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
