@@ -2,8 +2,15 @@ import asyncio
 import secrets
 
 import pytest
+from starlette.testclient import TestClient
 
+from api.api import create_app
 from api.repository.movie.mongo import MongoMovieRepository
+
+
+@pytest.fixture()
+def test_client():
+    return TestClient(app=create_app())
 
 
 @pytest.fixture()

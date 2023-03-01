@@ -12,7 +12,7 @@ from api.repository.movie.mongo import MongoMovieRepository
 from api.responses.detail import DetailResponse
 from api.settings import Settings
 
-router = APIRouter(prefix="/api/v1/movie", tags=["movies"])
+router = APIRouter(prefix="/api/v1/movies", tags=["movies"])
 
 
 @lru_cache()
