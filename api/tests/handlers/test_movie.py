@@ -77,3 +77,29 @@ async def test_create_movie_validation_error(test_client, movie_json):
 
     # Assertion
     assert result.status_code == 422
+
+
+@pytest.mark.asyncio()
+@pytest.mark.parametrize(
+    "movie_seed, movie_id, expected_status_code, expected_result",
+    [
+        ([], "random", 404, "Movie with id random is not exist"),
+    ],
+)
+async def test_get_movie(
+    test_client, movie_seed, movie_id, expected_status_code, expected_result,
+):
+    # Setup
+    repo = MemoryMovieRepository()
+    patched_dependency = functools.partial(memory_repository_dependency, repo)
+    test_client.app.dependency_overrides[movie_repository] = patched_dependency
+
+    for movie in movie_seed:
+        await repo.create(movie)
+
+    # test
+    result = test_client.get(f"/api/v1/movies/{movie_id}")
+
+    # assert
+    assert result.status_code == expected_status_code
+    assert result.text == expected_result

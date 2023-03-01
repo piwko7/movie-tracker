@@ -76,7 +76,10 @@ async def get_movie_by_id(
 ):
     movie = await repo.get(movie_id=movie_id)
     if movie is None:
-        return DetailResponse(message=f"Movie with id {movie_id} is not exist")
+        return Response(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content=f"Movie with id {movie_id} is not exist",
+        )
     return movie
 
 
