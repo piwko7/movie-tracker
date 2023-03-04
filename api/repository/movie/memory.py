@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from api.entities.movie import Movie
 from api.repository.movie.abstractions import MovieRepository, RepositoryException
 
@@ -24,7 +26,7 @@ class MemoryMovieRepository(MovieRepository):
         limit: int = 1000,
     ) -> list[Movie]:
         return_value = []
-        for _, value in self._storage.items()[offset : offset + limit]:
+        for _, value in self._storage.items():
             if title == value.title:
                 return_value.append(value)
         if limit == 0:
@@ -32,7 +34,12 @@ class MemoryMovieRepository(MovieRepository):
         return return_value[offset : offset + limit]
 
     async def delete(self, movie_id: str):
-        self._storage.pop(movie_id, None)
+        deleted_movie = self._storage.pop(movie_id, None)
+        DeletedMovie = namedtuple("DeletedMovie", ["deleted_count"])
+        deleted_count = 0
+        if deleted_movie:
+            deleted_count = 1
+        return DeletedMovie(deleted_count=deleted_count)
 
     async def update(self, movie_id: str, update_parameters: dict):
         movie = self._storage.get(movie_id)

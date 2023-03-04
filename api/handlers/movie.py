@@ -46,7 +46,7 @@ async def create_movie(
 
 
 @router.get(
-    "/title",
+    "/",
 )
 async def get_movie_by_title(
     title: str = Query(..., description="The title of the movie.", min_length=3),
